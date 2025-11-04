@@ -1,0 +1,6 @@
+base_spec,variant,chemical_name,cas,pct_wt_low,pct_wt_high,notes
+TEST-SPEC-001,,Water,7732-18-5,50.0,70.0,Fake composition for testing
+TEST-SPEC-001,,Test Base B,88888-88-8,10.0,20.0,Fake composition for testing
+TEST-SPEC-002,TYPE A,Water,7732-18-5,60.0,80.0,Fake composition for testing
+TEST-SPEC-002,TYPE A,Test Acid A,99999-99-9,10.0,20.0,Fake composition for testing
+TEST-SPEC-003,,Test Acid A,99999-99-9,5.0,15.0,Fake composition for testing

@@ -1,0 +1,4 @@
+finish_code,sft_code,step_order
+BP27,SFT-DEGREASE,1
+BP27,SFT-PASSIVATE,2
+SA12,SFT-ANODIZE,1

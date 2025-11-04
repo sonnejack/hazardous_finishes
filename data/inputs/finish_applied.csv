@@ -1,0 +1,17 @@
+﻿code,description
+0,No finish designation
+O,Ground Support Equipment
+A,Anodic treatment
+B,"Bare surfaces or passivated, fluoride phosphate treated, etc."
+C,Chemical conversion coating (chem film)
+D,"Plating (cadmium, chrome, nickel, etc.,)"
+E,"Black topcoat (epoxy, urethane, etc.)"
+F,Fuel tank coating
+G,Gray topcoat
+L,"Solid film lube, grease, temporary protective coatings, etc."
+M,"Specialty coatings, (i.e. observables coatings, rain erosion coatings, etc.)"
+P,Prime (including adhesive primers)
+R,Color topcoat
+S,"Sealant, elastomeric coatings, etc."
+W,White topcoat
+X,Finish according to Drawing Notes

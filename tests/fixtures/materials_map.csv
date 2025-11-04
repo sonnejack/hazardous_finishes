@@ -1,0 +1,4 @@
+base_spec,variant,description,notes
+TEST-SPEC-001,,Fake alkaline cleaner specification,Test fixture only
+TEST-SPEC-002,TYPE A,Fake anodize specification with TYPE A variant,Test fixture only
+TEST-SPEC-003,,Fake passivation solution specification,Test fixture only

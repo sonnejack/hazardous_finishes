@@ -1,0 +1,4 @@
+sft_code,parent_group,description,associated_specs,source_doc,last_review,notes
+SFT-DEGREASE,Cleaning,Immerse parts in alkaline cleaner TEST-SPEC-001 at 140-160F for 5-10 minutes. Rinse with DI water.,TEST-SPEC-001,TEST-SOP-001,2024-01-15,Test fixture for MVP
+SFT-PASSIVATE,Surface Treatment,Apply TEST-SPEC-003 passivation solution at room temperature for 2-5 minutes. Rinse and dry.,TEST-SPEC-003,TEST-SOP-002,2024-02-20,Test fixture for MVP
+SFT-ANODIZE,Coating,Anodize per TEST-SPEC-002 TYPE A at 12-18V for 30-45 minutes in temperature-controlled bath.,TEST-SPEC-002,TEST-SOP-003,2024-03-10,Test fixture for MVP

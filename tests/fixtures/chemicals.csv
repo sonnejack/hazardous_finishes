@@ -1,0 +1,4 @@
+name,cas,hazard_flags,default_hazard_level
+Water,7732-18-5,"{""ghs"":[],""categories"":[""NON_HAZARDOUS""],""signal_word"":""NONE""}",1
+Test Acid A,99999-99-9,"{""ghs"":[""H314""],""categories"":[""CORROSIVE""],""signal_word"":""DANGER""}",4
+Test Base B,88888-88-8,"{""ghs"":[""H314"",""H290""],""categories"":[""CORROSIVE"",""METAL_CORROSIVE""],""signal_word"":""DANGER""}",4

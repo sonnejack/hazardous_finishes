@@ -1,0 +1,4 @@
+sft_code,base_spec,variant,note
+SFT-DEGREASE,TEST-SPEC-001,,Primary cleaner solution
+SFT-PASSIVATE,TEST-SPEC-003,,Passivation bath
+SFT-ANODIZE,TEST-SPEC-002,TYPE A,Anodize electrolyte

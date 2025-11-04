@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hazardous-finishes"
+version = "0.1.0"
+description = "Deterministic data engine for finish code to hazardous chemicals tracking"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Proprietary"}
+authors = [
+    {name = "Internal Team"}
+]
+dependencies = [
+    "pandas==2.2.0",
+    "sqlite-utils==3.36",
+    "sqlalchemy==2.0.25",
+    "python-dotenv==1.0.1",
+    "click==8.1.7",
+    "streamlit==1.31.0",
+    "regex==2023.12.25",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.0.0",
+    "pytest-cov==4.1.0",
+    "black==24.1.1",
+    "ruff==0.2.0",
+]
+
+[project.scripts]
+hazard-cli = "app.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*", "etl*", "db*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "-v --tb=short"
