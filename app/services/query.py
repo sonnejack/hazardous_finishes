@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 
-def get_finish_code_tree(finish_code: str, db_path: str = "db/engine.sqlite") -> dict[str, Any]:
+def get_finish_code_tree(finish_code: str, db_path: str = "data/hazardous_finishes.sqlite") -> dict[str, Any]:
     """
     Retrieve complete finish code hierarchy with all related data.
 
@@ -260,7 +260,7 @@ def get_finish_code_tree(finish_code: str, db_path: str = "db/engine.sqlite") ->
     }
 
 
-def get_all_finish_codes(db_path: str = "db/engine.sqlite") -> list[dict[str, Any]]:
+def get_all_finish_codes(db_path: str = "data/hazardous_finishes.sqlite") -> list[dict[str, Any]]:
     """
     Retrieve list of all finish codes with descriptions.
 
@@ -318,7 +318,7 @@ def get_all_finish_codes(db_path: str = "db/engine.sqlite") -> list[dict[str, An
 
 
 def get_chemicals_by_hazard_level(
-    db_path: str = "db/engine.sqlite",
+    db_path: str = "data/hazardous_finishes.sqlite",
     min_level: int = 1
 ) -> list[dict[str, Any]]:
     """
@@ -475,7 +475,7 @@ def get_all_specifications(db_path: str = "data/hazardous_finishes.sqlite") -> d
     }
 
 
-def get_finish_code_specs(finish_code: str, db_path: str = "db/engine.sqlite") -> dict[str, Any]:
+def get_finish_code_specs(finish_code: str, db_path: str = "data/hazardous_finishes.sqlite") -> dict[str, Any]:
     """
     Extract all unique specifications referenced in a finish code's SFT steps.
 
