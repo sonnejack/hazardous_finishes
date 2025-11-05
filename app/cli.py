@@ -158,8 +158,16 @@ def specs(finish_code, db, output, compact):
                     click.echo(f"  {code}")
             sys.exit(1)
 
+        # Get the full finish code info to display program and source_doc
+        from app.services.query import get_finish_code_tree
+        tree_result = get_finish_code_tree(finish_code, db)
+
         # Display results in human-readable format
         click.echo(f"\nSpecifications for finish code: {click.style(result['finish_code'], bold=True)}")
+        if 'parsed' in tree_result:
+            parsed = tree_result['parsed']
+            click.echo(f"Program: {parsed['program']}")
+            click.echo(f"Source Doc: {parsed['source_doc']}")
         click.echo(f"Total unique specifications: {result['spec_count']}\n")
 
         if result['specifications']:
@@ -306,6 +314,8 @@ def tree(finish_code, db):
         # Display tree
         parsed = result['parsed']
         click.echo(f"\n{click.style(result['finish_code'], fg='cyan', bold=True)}: {parsed['finish_description']}")
+        click.echo(f"├─ Program: {parsed['program']}")
+        click.echo(f"├─ Source Doc: {parsed['source_doc']}")
         click.echo(f"├─ Substrate: {parsed['substrate']['code']} - {parsed['substrate']['description'][:60]}")
         click.echo(f"├─ Finish Applied: {parsed['finish_applied']['code']} - {parsed['finish_applied']['description'][:60]}")
         click.echo(f"└─ Sequence ID: {parsed['seq_id']}")

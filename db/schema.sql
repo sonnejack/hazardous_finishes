@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS finish_codes (
     seq_id INTEGER NOT NULL,
     description TEXT,
     notes TEXT,
+    source_doc TEXT,
+    program TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (substrate_id) REFERENCES substrates(id) ON DELETE RESTRICT,
     FOREIGN KEY (finish_applied_id) REFERENCES finish_applied(id) ON DELETE RESTRICT
@@ -201,6 +203,8 @@ SELECT
     fc.seq_id,
     fc.description AS finish_description,
     fc.notes,
+    fc.source_doc,
+    fc.program,
     s.code AS substrate_code,
     s.description AS substrate_description,
     fa.code AS finish_applied_code,

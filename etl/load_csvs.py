@@ -216,6 +216,8 @@ def load_finish_codes(csv_path: str, conn: sqlite3.Connection) -> int:
             description = row.get("finish_code_description", "").strip()
 
         notes = row.get("notes", "").strip() if "notes" in df.columns else ""
+        source_doc = row.get("source_doc", "").strip() if "source_doc" in df.columns else ""
+        program = row.get("program", "").strip() if "program" in df.columns else ""
 
         # Convert seq_id to int, stripping any whitespace
         seq_id = str(row["seq_id"]).strip()
@@ -224,15 +226,17 @@ def load_finish_codes(csv_path: str, conn: sqlite3.Connection) -> int:
         seq_id = int(seq_id)
 
         cursor.execute("""
-            INSERT INTO finish_codes (code, substrate_id, finish_applied_id, seq_id, description, notes)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO finish_codes (code, substrate_id, finish_applied_id, seq_id, description, notes, source_doc, program)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(code) DO UPDATE SET
                 substrate_id = excluded.substrate_id,
                 finish_applied_id = excluded.finish_applied_id,
                 seq_id = excluded.seq_id,
                 description = excluded.description,
-                notes = excluded.notes
-        """, (row["finish_code"].strip(), substrate_id, fa_id, seq_id, description, notes))
+                notes = excluded.notes,
+                source_doc = excluded.source_doc,
+                program = excluded.program
+        """, (row["finish_code"].strip(), substrate_id, fa_id, seq_id, description, notes, source_doc, program))
 
         # Parse sft_steps if present
         if "sft_steps" in df.columns and row["sft_steps"]:

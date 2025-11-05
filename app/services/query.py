@@ -108,6 +108,8 @@ def get_finish_code_tree(finish_code: str, db_path: str = "data/hazardous_finish
             fc.seq_id,
             fc.description AS finish_description,
             fc.notes,
+            fc.source_doc,
+            fc.program,
             s.code AS substrate_code,
             s.description AS substrate_description,
             fa.code AS finish_applied_code,
@@ -130,7 +132,9 @@ def get_finish_code_tree(finish_code: str, db_path: str = "data/hazardous_finish
         },
         "seq_id": parsed_row["seq_id"],
         "finish_description": parsed_row["finish_description"],
-        "notes": parsed_row["notes"]
+        "notes": parsed_row["notes"],
+        "source_doc": parsed_row["source_doc"],
+        "program": parsed_row["program"]
     }
 
     # Get ordered SFT steps
@@ -296,7 +300,9 @@ def get_all_finish_codes(db_path: str = "data/hazardous_finishes.sqlite") -> lis
             fc.description,
             s.description AS substrate,
             fa.description AS finish_applied,
-            fc.seq_id
+            fc.seq_id,
+            fc.source_doc,
+            fc.program
         FROM finish_codes fc
         JOIN substrates s ON fc.substrate_id = s.id
         JOIN finish_applied fa ON fc.finish_applied_id = fa.id
@@ -310,7 +316,9 @@ def get_all_finish_codes(db_path: str = "data/hazardous_finishes.sqlite") -> lis
             "description": row["description"],
             "substrate": row["substrate"],
             "finish_applied": row["finish_applied"],
-            "seq_id": row["seq_id"]
+            "seq_id": row["seq_id"],
+            "source_doc": row["source_doc"],
+            "program": row["program"]
         })
 
     conn.close()
