@@ -1,16 +1,16 @@
-﻿code,description
-0,No finish designation
-O,Ground Support Equipment
-A,"1000, 3000, 5000, & 6000 series, high strength casting alloys and other inherently corrosion resistant aluminum alloys"
-B,2000 & 7000 series aluminum alloys
-C,"Organic matrix composite laminates; glass epoxy, graphite epoxy, graphite polyimide,etc."
-D,Bonded assemblies
-F,"Steel alloys, non-corrosion resistant"
-L,"Tubing; steel, aluminum, etc."
-M,"Miscellaneous other metals; nickel, copper, tungsten, bronze, brass, etc."
-P,"Plastic molded parts, reinforced and non-reinforced, i.e. nylon, PEEK, etc."
-R,Elastomeric sheet or rubber coated surfaces
-S,Corrosion resistant steel alloys
-T,Titanium alloys
-X,Nonspecific surfaces
-Z,Installation procedures
+﻿code,description,source_doc,program
+0,No finish designation,LMA-PJ100,LMA
+O,Ground Support Equipment,LMA-PJ100,LMA
+A,"1000, 3000, 5000, & 6000 series, high strength casting alloys and other inherently corrosion resistant aluminum alloys",LMA-PJ100,LMA
+B,2000 & 7000 series aluminum alloys,LMA-PJ100,LMA
+C,"Organic matrix composite laminates; glass epoxy, graphite epoxy, graphite polyimide,etc.",LMA-PJ100,LMA
+D,Bonded assemblies,LMA-PJ100,LMA
+F,"Steel alloys, non-corrosion resistant",LMA-PJ100,LMA
+L,"Tubing; steel, aluminum, etc.",LMA-PJ100,LMA
+M,"Miscellaneous other metals; nickel, copper, tungsten, bronze, brass, etc.",LMA-PJ100,LMA
+P,"Plastic molded parts, reinforced and non-reinforced, i.e. nylon, PEEK, etc.",LMA-PJ100,LMA
+R,Elastomeric sheet or rubber coated surfaces,LMA-PJ100,LMA
+S,Corrosion resistant steel alloys,LMA-PJ100,LMA
+T,Titanium alloys,LMA-PJ100,LMA
+X,Nonspecific surfaces,LMA-PJ100,LMA
+Z,Installation procedures,LMA-PJ100,LMA

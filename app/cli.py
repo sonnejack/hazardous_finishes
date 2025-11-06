@@ -320,42 +320,55 @@ def tree(finish_code, db):
         click.echo(f"├─ Finish Applied: {parsed['finish_applied']['code']} - {parsed['finish_applied']['description'][:60]}")
         click.echo(f"└─ Sequence ID: {parsed['seq_id']}")
 
-        click.echo(f"\n{click.style('Process Steps:', fg='yellow', bold=True)}")
+        # Display direct specifications if present (bypasses SFT steps)
+        if result.get('direct_specs'):
+            click.echo(f"\n{click.style('Direct Specifications:', fg='green', bold=True)}")
+            for spec in result['direct_specs']:
+                click.echo(f"  • {spec}")
 
-        for i, step in enumerate(result['steps']):
-            is_last_step = (i == len(result['steps']) - 1)
-            step_prefix = "└─" if is_last_step else "├─"
-            indent = "   " if is_last_step else "│  "
+        if result.get('finish_applied_specs'):
+            click.echo(f"\n{click.style('Finish Applied Specifications:', fg='green', bold=True)}")
+            for spec in result['finish_applied_specs']:
+                click.echo(f"  • {spec}")
 
-            step_title = f'Step {step["step_order"]}: {step["sft_code"]}'
-            click.echo(f"\n{step_prefix} {click.style(step_title, bold=True)}")
-            click.echo(f"{indent} Group: {step['parent_group'] or 'N/A'}")
-            click.echo(f"{indent} Description: {step['description'][:70]}")
+        # Display SFT steps (may be empty for some programs)
+        if result['steps']:
+            click.echo(f"\n{click.style('Process Steps:', fg='yellow', bold=True)}")
 
-            if step['associated_specs']:
-                specs = [s.strip() for s in step['associated_specs'].split(',')]
-                if len(specs) > 1:
-                    specs_title = click.style('Specifications (any of):', fg='green')
+            for i, step in enumerate(result['steps']):
+                is_last_step = (i == len(result['steps']) - 1)
+                step_prefix = "└─" if is_last_step else "├─"
+                indent = "   " if is_last_step else "│  "
+
+                step_title = f'Step {step["step_order"]}: {step["sft_code"]}'
+                click.echo(f"\n{step_prefix} {click.style(step_title, bold=True)}")
+                click.echo(f"{indent} Group: {step['parent_group'] or 'N/A'}")
+                click.echo(f"{indent} Description: {step['description'][:70]}")
+
+                if step['associated_specs']:
+                    specs = [s.strip() for s in step['associated_specs'].split(',')]
+                    if len(specs) > 1:
+                        specs_title = click.style('Specifications (any of):', fg='green')
+                    else:
+                        specs_title = click.style('Specification:', fg='green')
+                    click.echo(f"{indent} {specs_title}")
+                    for spec in specs:
+                        click.echo(f"{indent}   • {spec}")
+
+                if step['materials']:
+                    materials_title = click.style('Materials:', fg='magenta')
+                    click.echo(f"{indent} {materials_title}")
+                    for mat in step['materials']:
+                        mat_variant = (' ' + mat['variant']) if mat['variant'] else ''
+                        click.echo(f"{indent}   • {mat['base_spec']}{mat_variant}")
+
+                        if mat['chemicals']:
+                            for chem in mat['chemicals']:
+                                hazard = f" [Hazard Level {chem['default_hazard_level']}]" if chem['default_hazard_level'] else ""
+                                click.echo(f"{indent}     - {chem['name']}{hazard}")
                 else:
-                    specs_title = click.style('Specification:', fg='green')
-                click.echo(f"{indent} {specs_title}")
-                for spec in specs:
-                    click.echo(f"{indent}   • {spec}")
-
-            if step['materials']:
-                materials_title = click.style('Materials:', fg='magenta')
-                click.echo(f"{indent} {materials_title}")
-                for mat in step['materials']:
-                    mat_variant = (' ' + mat['variant']) if mat['variant'] else ''
-                    click.echo(f"{indent}   • {mat['base_spec']}{mat_variant}")
-
-                    if mat['chemicals']:
-                        for chem in mat['chemicals']:
-                            hazard = f" [Hazard Level {chem['default_hazard_level']}]" if chem['default_hazard_level'] else ""
-                            click.echo(f"{indent}     - {chem['name']}{hazard}")
-            else:
-                no_materials_msg = click.style('Materials: (not loaded yet)', dim=True)
-                click.echo(f"{indent} {no_materials_msg}")
+                    no_materials_msg = click.style('Materials: (not loaded yet)', dim=True)
+                    click.echo(f"{indent} {no_materials_msg}")
 
         click.echo()
 

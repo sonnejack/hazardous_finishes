@@ -110,10 +110,12 @@ def get_finish_code_tree(finish_code: str, db_path: str = "data/hazardous_finish
             fc.notes,
             fc.source_doc,
             fc.program,
+            fc.associated_specs,
             s.code AS substrate_code,
             s.description AS substrate_description,
             fa.code AS finish_applied_code,
-            fa.description AS finish_applied_description
+            fa.description AS finish_applied_description,
+            fa.associated_specs AS finish_applied_specs
         FROM finish_codes fc
         JOIN substrates s ON fc.substrate_id = s.id
         JOIN finish_applied fa ON fc.finish_applied_id = fa.id
@@ -134,7 +136,8 @@ def get_finish_code_tree(finish_code: str, db_path: str = "data/hazardous_finish
         "finish_description": parsed_row["finish_description"],
         "notes": parsed_row["notes"],
         "source_doc": parsed_row["source_doc"],
-        "program": parsed_row["program"]
+        "program": parsed_row["program"],
+        "associated_specs": parsed_row["associated_specs"]
     }
 
     # Get ordered SFT steps
@@ -256,10 +259,22 @@ def get_finish_code_tree(finish_code: str, db_path: str = "data/hazardous_finish
 
     conn.close()
 
+    # Build direct specifications if present (bypasses SFT steps)
+    direct_specs = []
+    if parsed["associated_specs"] and parsed["associated_specs"].strip():
+        direct_specs = [s.strip() for s in parsed["associated_specs"].split(',') if s.strip()]
+
+    # Also check finish_applied specs
+    finish_applied_specs = []
+    if parsed_row["finish_applied_specs"] and parsed_row["finish_applied_specs"].strip():
+        finish_applied_specs = [s.strip() for s in parsed_row["finish_applied_specs"].split(',') if s.strip()]
+
     return {
         "finish_code": finish_code,
         "parsed": parsed,
-        "steps": steps,
+        "direct_specs": direct_specs,  # Specifications directly linked to finish code (bypasses SFT)
+        "finish_applied_specs": finish_applied_specs,  # Specifications from finish_applied
+        "steps": steps,  # SFT steps (may be empty for some programs)
         "provenance": provenance
     }
 

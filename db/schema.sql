@@ -13,23 +13,30 @@ PRAGMA foreign_keys = ON;
 -- Substrate types (base materials receiving finishes)
 CREATE TABLE IF NOT EXISTS substrates (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    code TEXT NOT NULL UNIQUE,
+    code TEXT NOT NULL,
     description TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    source_doc TEXT,
+    program TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(code, program)
 );
 
 -- Finish types applied to substrates
 CREATE TABLE IF NOT EXISTS finish_applied (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    code TEXT NOT NULL UNIQUE,
+    code TEXT NOT NULL,
     description TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    source_doc TEXT,
+    program TEXT,
+    associated_specs TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(code, program)
 );
 
 -- Composite finish codes (substrate + finish + sequence)
 CREATE TABLE IF NOT EXISTS finish_codes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    code TEXT NOT NULL UNIQUE,
+    code TEXT NOT NULL,
     substrate_id INTEGER NOT NULL,
     finish_applied_id INTEGER NOT NULL,
     seq_id INTEGER NOT NULL,
@@ -37,9 +44,11 @@ CREATE TABLE IF NOT EXISTS finish_codes (
     notes TEXT,
     source_doc TEXT,
     program TEXT,
+    associated_specs TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (substrate_id) REFERENCES substrates(id) ON DELETE RESTRICT,
-    FOREIGN KEY (finish_applied_id) REFERENCES finish_applied(id) ON DELETE RESTRICT
+    FOREIGN KEY (finish_applied_id) REFERENCES finish_applied(id) ON DELETE RESTRICT,
+    UNIQUE(code, program)
 );
 
 -- =============================================================================
@@ -205,10 +214,16 @@ SELECT
     fc.notes,
     fc.source_doc,
     fc.program,
+    fc.associated_specs AS finish_code_specs,
     s.code AS substrate_code,
     s.description AS substrate_description,
+    s.source_doc AS substrate_source_doc,
+    s.program AS substrate_program,
     fa.code AS finish_applied_code,
-    fa.description AS finish_applied_description
+    fa.description AS finish_applied_description,
+    fa.source_doc AS finish_applied_source_doc,
+    fa.program AS finish_applied_program,
+    fa.associated_specs AS finish_applied_specs
 FROM finish_codes fc
 JOIN substrates s ON fc.substrate_id = s.id
 JOIN finish_applied fa ON fc.finish_applied_id = fa.id;

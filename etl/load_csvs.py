@@ -85,7 +85,7 @@ def load_substrates(csv_path: str, conn: sqlite3.Connection) -> int:
     """
     Load substrates from CSV.
 
-    CSV columns: code, description
+    CSV columns: code, description, source_doc?, program?
 
     Args:
         csv_path: Path to substrates.csv
@@ -109,12 +109,16 @@ def load_substrates(csv_path: str, conn: sqlite3.Connection) -> int:
 
     cursor = conn.cursor()
     for _, row in df.iterrows():
+        source_doc = row.get("source_doc", "").strip() if "source_doc" in df.columns else ""
+        program = row.get("program", "").strip() if "program" in df.columns else ""
+
         cursor.execute("""
-            INSERT INTO substrates (code, description)
-            VALUES (?, ?)
-            ON CONFLICT(code) DO UPDATE SET
-                description = excluded.description
-        """, (row["code"].strip(), row["description"].strip()))
+            INSERT INTO substrates (code, description, source_doc, program)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(code, program) DO UPDATE SET
+                description = excluded.description,
+                source_doc = excluded.source_doc
+        """, (row["code"].strip(), row["description"].strip(), source_doc, program))
 
     conn.commit()
     return len(df)
@@ -124,7 +128,7 @@ def load_finish_applied(csv_path: str, conn: sqlite3.Connection) -> int:
     """
     Load finish_applied from CSV.
 
-    CSV columns: code, description
+    CSV columns: code, description, source_doc?, program?, associated_specs?
 
     Args:
         csv_path: Path to finish_applied.csv
@@ -143,12 +147,18 @@ def load_finish_applied(csv_path: str, conn: sqlite3.Connection) -> int:
 
     cursor = conn.cursor()
     for _, row in df.iterrows():
+        source_doc = row.get("source_doc", "").strip() if "source_doc" in df.columns else ""
+        program = row.get("program", "").strip() if "program" in df.columns else ""
+        associated_specs = row.get("associated_specs", "").strip() if "associated_specs" in df.columns else ""
+
         cursor.execute("""
-            INSERT INTO finish_applied (code, description)
-            VALUES (?, ?)
-            ON CONFLICT(code) DO UPDATE SET
-                description = excluded.description
-        """, (row["code"].strip(), row["description"].strip()))
+            INSERT INTO finish_applied (code, description, source_doc, program, associated_specs)
+            VALUES (?, ?, ?, ?, ?)
+            ON CONFLICT(code, program) DO UPDATE SET
+                description = excluded.description,
+                source_doc = excluded.source_doc,
+                associated_specs = excluded.associated_specs
+        """, (row["code"].strip(), row["description"].strip(), source_doc, program, associated_specs))
 
     conn.commit()
     return len(df)
@@ -190,21 +200,26 @@ def load_finish_codes(csv_path: str, conn: sqlite3.Connection) -> int:
     sft_steps_data = []  # Store SFT step mappings for later processing
 
     for _, row in df.iterrows():
-        # Lookup substrate_id
-        cursor.execute("SELECT id FROM substrates WHERE code = ?", (row["substrate_code"].strip(),))
+        # Get program from row
+        program = row.get("program", "").strip() if "program" in df.columns else ""
+
+        # Lookup substrate_id by (code, program)
+        cursor.execute("SELECT id FROM substrates WHERE code = ? AND program = ?",
+                      (row["substrate_code"].strip(), program))
         substrate_result = cursor.fetchone()
         if not substrate_result:
             raise ValueError(
-                f"Substrate code '{row['substrate_code']}' not found for finish_code '{row['finish_code']}'"
+                f"Substrate code '{row['substrate_code']}' for program '{program}' not found for finish_code '{row['finish_code']}'"
             )
         substrate_id = substrate_result[0]
 
-        # Lookup finish_applied_id
-        cursor.execute("SELECT id FROM finish_applied WHERE code = ?", (row["finish_applied_code"].strip(),))
+        # Lookup finish_applied_id by (code, program)
+        cursor.execute("SELECT id FROM finish_applied WHERE code = ? AND program = ?",
+                      (row["finish_applied_code"].strip(), program))
         fa_result = cursor.fetchone()
         if not fa_result:
             raise ValueError(
-                f"Finish applied code '{row['finish_applied_code']}' not found for finish_code '{row['finish_code']}'"
+                f"Finish applied code '{row['finish_applied_code']}' for program '{program}' not found for finish_code '{row['finish_code']}'"
             )
         fa_id = fa_result[0]
 
@@ -217,7 +232,8 @@ def load_finish_codes(csv_path: str, conn: sqlite3.Connection) -> int:
 
         notes = row.get("notes", "").strip() if "notes" in df.columns else ""
         source_doc = row.get("source_doc", "").strip() if "source_doc" in df.columns else ""
-        program = row.get("program", "").strip() if "program" in df.columns else ""
+        # program already extracted at line 204
+        associated_specs = row.get("associated_specs", "").strip() if "associated_specs" in df.columns else ""
 
         # Convert seq_id to int, stripping any whitespace
         seq_id = str(row["seq_id"]).strip()
@@ -226,17 +242,17 @@ def load_finish_codes(csv_path: str, conn: sqlite3.Connection) -> int:
         seq_id = int(seq_id)
 
         cursor.execute("""
-            INSERT INTO finish_codes (code, substrate_id, finish_applied_id, seq_id, description, notes, source_doc, program)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(code) DO UPDATE SET
+            INSERT INTO finish_codes (code, substrate_id, finish_applied_id, seq_id, description, notes, source_doc, program, associated_specs)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(code, program) DO UPDATE SET
                 substrate_id = excluded.substrate_id,
                 finish_applied_id = excluded.finish_applied_id,
                 seq_id = excluded.seq_id,
                 description = excluded.description,
                 notes = excluded.notes,
                 source_doc = excluded.source_doc,
-                program = excluded.program
-        """, (row["finish_code"].strip(), substrate_id, fa_id, seq_id, description, notes, source_doc, program))
+                associated_specs = excluded.associated_specs
+        """, (row["finish_code"].strip(), substrate_id, fa_id, seq_id, description, notes, source_doc, program, associated_specs))
 
         # Parse sft_steps if present
         if "sft_steps" in df.columns and row["sft_steps"]:

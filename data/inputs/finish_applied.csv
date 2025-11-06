@@ -1,17 +1,17 @@
-﻿code,description
-0,No finish designation
-O,Ground Support Equipment
-A,Anodic treatment
-B,"Bare surfaces or passivated, fluoride phosphate treated, etc."
-C,Chemical conversion coating (chem film)
-D,"Plating (cadmium, chrome, nickel, etc.,)"
-E,"Black topcoat (epoxy, urethane, etc.)"
-F,Fuel tank coating
-G,Gray topcoat
-L,"Solid film lube, grease, temporary protective coatings, etc."
-M,"Specialty coatings, (i.e. observables coatings, rain erosion coatings, etc.)"
-P,Prime (including adhesive primers)
-R,Color topcoat
-S,"Sealant, elastomeric coatings, etc."
-W,White topcoat
-X,Finish according to Drawing Notes
+﻿code,description,source_doc,program,associated_specs
+0,No finish designation,LMA-PJ100,LMA,
+O,Ground Support Equipment,LMA-PJ100,LMA,
+A,Anodic treatment,LMA-PJ100,LMA,
+B,"Bare surfaces or passivated, fluoride phosphate treated, etc.",LMA-PJ100,LMA,
+C,Chemical conversion coating (chem film),LMA-PJ100,LMA,
+D,"Plating (cadmium, chrome, nickel, etc.,)",LMA-PJ100,LMA,
+E,"Black topcoat (epoxy, urethane, etc.)",LMA-PJ100,LMA,
+F,Fuel tank coating,LMA-PJ100,LMA,
+G,Gray topcoat,LMA-PJ100,LMA,
+L,"Solid film lube, grease, temporary protective coatings, etc.",LMA-PJ100,LMA,
+M,"Specialty coatings, (i.e. observables coatings, rain erosion coatings, etc.)",LMA-PJ100,LMA,
+P,Prime (including adhesive primers),LMA-PJ100,LMA,
+R,Color topcoat,LMA-PJ100,LMA,
+S,"Sealant, elastomeric coatings, etc.",LMA-PJ100,LMA,
+W,White topcoat,LMA-PJ100,LMA,
+X,Finish according to Drawing Notes,LMA-PJ100,LMA,
